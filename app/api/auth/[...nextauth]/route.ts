@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client/extension";
+import { PrismaClient } from "@prisma/client";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -12,17 +12,20 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async signin({ user }) {
+    async signIn({ user }) {
+      console.log("signIn", user);
+
       try {
-        const userExists = await prisma.user.findUnique({
+        const dbUser = await prisma.user.findUnique({
           where: {
             email: user.email,
           },
         });
-        console.log("userExists)", userExists);
+        console.log("user exists info", dbUser);
+        // throw new Error("User already exists"); // Throw error instead of returning a URL
 
-        // if user does not exist, create a new user and let signin
-        if (!userExists) {
+        if (!dbUser) {
+          // if user does not exist, create a new user and let signin
           const role =
             user.email === process.env.ADMIN_EMAIL ? "ADMIN" : "USER";
           await prisma.user.create({
@@ -33,16 +36,29 @@ export const authOptions = {
               image: user.image ? user.image : "",
             },
           });
-          return true;
-        } else {
-          //if user does exist then throw an error and does not allow siginin
-          console.log("User already exists");
-          throw new Error("User already exists");
         }
+        user.role = dbUser?.role;
+
+        return true;
       } catch (error) {
         console.error("Error saving user:", error);
+        // return `/login?error=Something went wrong`; // Redirect with error
+        // throw new Error("Something went wrong"); // Throw a readable error
         return false;
       }
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = user.role; // Now user.role exists because we added it in `signIn`
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.role = token.role; // Attach role to session
+      }
+      return session;
     },
   },
   pages: {

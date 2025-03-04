@@ -13,11 +13,13 @@ export default function Dashboard() {
     router.push("/login");
     return null;
   }
+  console.log("session", session);
 
   return (
     <div>
       <h2>Welcome, {session.user?.name}</h2>
       <p>Email: {session.user?.email}</p>
+      <p>Role: {session.user?.role}</p>
       <Button onClick={() => signOut()}>Logout</Button>
     </div>
   );
