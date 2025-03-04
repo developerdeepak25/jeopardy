@@ -22,19 +22,19 @@ model User {
   id       String   @id @default(uuid()) // UUID as Primary Key
   name     String
   email    String   @unique
-  password String
+  password String?
   role     Role
   Answer   Answer[]
+  image   String?
 }
 
 model Question {
   id         String   @id @default(uuid()) // UUID as Primary Key
-  value      String
+  value      String  
   options    String[]
-  amount     String
+  amount     Int
   CorrectIdx Int
   Answer     Answer[]
-  // catagory
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
 }
