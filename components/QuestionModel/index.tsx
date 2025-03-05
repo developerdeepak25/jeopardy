@@ -9,16 +9,25 @@ import {
 import { Button } from "../ui/button";
 
 type DialogProps = {
-  isDialogOpen: boolean;
-  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   children: React.ReactNode;
+  title?: string; // for diables people
+  onSubmit?: () => void;
 };
 
-const index = ({ isDialogOpen, setIsDialogOpen, children }: DialogProps) => {
+const index = ({
+  isOpen,
+  setIsOpen,
+  children,
+  title,
+  onSubmit,
+}: DialogProps) => {
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
+          <DialogTitle>{title ? title : "Question"}</DialogTitle>
           {/* <DialogTitle className="text-xl">
             {selectedCategory.name}: ${selectedQuestion.amount} Question
           </DialogTitle> */}
@@ -53,17 +62,18 @@ const index = ({ isDialogOpen, setIsDialogOpen, children }: DialogProps) => {
             >
               Submit Answer
             </Button>
-          ) : (
-            <Button onClick={() => setIsDialogOpen(false)} className="w-full">
-              Close
+          ) : ( */}
+          {onSubmit && (
+            <Button onClick={() => onSubmit()} className="w-full">
+              Submit
             </Button>
-          )} */}
+          )}
+          {/* )} */}
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
-
 
 //   <RadioGroup value={selectedOption} onValueChange={setSelectedOption}>
 //     {selectedQuestion.options.map((option, index) => (

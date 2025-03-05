@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 // ?This route is used to submit the answer for the question it also returns the answer obj
 
-// takes two query params ques and ansIndex
+// takes two query params quesId and ansIndex
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const searchParams = request.nextUrl.searchParams;
-    const quesId = searchParams.get("quees");
+    const quesId = searchParams.get("quesId");
     const ansIndex = searchParams.get("ansIndex");
     console.log(quesId, ansIndex);
 
