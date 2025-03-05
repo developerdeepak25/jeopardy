@@ -1,10 +1,10 @@
 import { PrismaClient } from "@prisma/client";
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 const prisma = new PrismaClient();
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -18,7 +18,7 @@ export const authOptions = {
       try {
         const dbUser = await prisma.user.findUnique({
           where: {
-            email: user.email,
+            email: user.email!,
           },
         });
         console.log("user exists info", dbUser);
@@ -26,18 +26,27 @@ export const authOptions = {
 
         if (!dbUser) {
           // if user does not exist, create a new user and let signin
-          const role =
-            user.email === process.env.ADMIN_EMAIL ? "ADMIN" : "USER";
-          await prisma.user.create({
+          const role = user.email === process.env.ADMIN_MAIL ? "ADMIN" : "USER";
+          console.log(role);
+
+          // ! Role should only be passes if user isVerified else not atlest for the ADMIN
+          const createdUser = await prisma.user.create({
             data: {
               role: role,
-              email: user.email,
-              name: user.name,
+              email: user.email!,
+              name: user.name!,
               image: user.image ? user.image : "",
             },
           });
+          console.log("user created info", createdUser);
+          user.role = createdUser.role;
+          user.id = createdUser.id;
+        } else {
+          // Use dbUser data for existing users
+          user.role = dbUser.role;
+          user.id = dbUser.id;
         }
-        user.role = dbUser?.role;
+        
 
         return true;
       } catch (error) {
@@ -50,13 +59,16 @@ export const authOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role; // Now user.role exists because we added it in `signIn`
+        token.id = user.id;
       }
       return token;
     },
 
     async session({ session, token }) {
       if (session.user) {
+        console.log("token.role", token.role);
         session.user.role = token.role; // Attach role to session
+        session.user.id = token.id;
       }
       return session;
     },

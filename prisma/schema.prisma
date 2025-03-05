@@ -25,12 +25,13 @@ model User {
   password String?
   role     Role
   Answer   Answer[]
-  image   String?
+  image    String?
+  
 }
 
 model Question {
   id         String   @id @default(uuid()) // UUID as Primary Key
-  value      String  
+  value      String
   options    String[]
   amount     Int
   CorrectIdx Int
