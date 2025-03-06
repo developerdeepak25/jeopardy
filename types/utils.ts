@@ -5,3 +5,9 @@ export type JeopardyQuestion = {
   amount: number;
   // correctAnswer: string;
 };
+
+export type Category ={
+  id: string;
+  name: string;
+  questions: JeopardyQuestion[];
+}

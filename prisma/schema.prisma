@@ -19,14 +19,14 @@ enum Role {
 }
 
 model User {
-  id       String   @id @default(uuid()) // UUID as Primary Key
-  name     String
-  email    String   @unique
-  password String?
-  role     Role
-  Answer   Answer[]
-  image    String?
-  
+  id          String   @id @default(uuid()) // UUID as Primary Key
+  name        String
+  email       String   @unique
+  password    String?
+  role        Role
+  Answer      Answer[]
+  image       String?
+  totalAmount Int @default(0)
 }
 
 model Question {

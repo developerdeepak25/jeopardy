@@ -26,12 +26,34 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    // getting  user for checks
+    //
+    const user = await prisma.user.findUnique({
+      where: {
+        id: session.user.id,
+      },
+      include: {
+        Answer: true,
+      },
+    });
+
+    // check if user has already answered the question
+    if (user?.Answer.some((ans) => ans.questionId === quesId)) {
+      return NextResponse.json(
+        { error: "Question Already Answered" },
+        { status: 400 }
+      );
+    }
+
+    // get question
     const question = await prisma.question.findUnique({
       where: {
         id: quesId,
       },
     });
 
+    // create answer for the user
     const answer = await prisma.answer.create({
       data: {
         userId: session.user.id,
@@ -41,11 +63,25 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    let updatedUser;
+    if (answer.correct) {
+      //? may require more checks
+      updatedUser = await prisma.user.update({
+        where: {
+          id: session.user.id,
+        },
+        data: {
+          totalAmount: {
+            increment: question?.amount,
+          },
+        },
+      });
+    }
+
     return NextResponse.json(
-      { message: "Answer Submitted", answer },
+      { message: "Answer Submitted", data: { answer, updatedUser } },
       { status: 200 }
     );
-    
   } catch (error) {
     console.log(error);
     return NextResponse.json(
