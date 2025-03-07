@@ -9,3 +9,4 @@ export default withAuth({
 export const config = {
   matcher: ["/jeopardy",'/leaderboard'], // Protect specific pages
 };
+  

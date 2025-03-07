@@ -56,7 +56,6 @@ const LeaderBoard = () => {
     return null;
   };
 
-
   return (
     <div className="flex justify-center h-full w-full">
       <div className="container p-4 shadow-md bg-white h-full">
@@ -72,34 +71,41 @@ const LeaderBoard = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.data.map((user, index: number) => (
-              <TableRow
-                key={user.id}
-                className={index < 3 ? "font-medium" : ""}
-              >
-                <TableCell className="font-medium">
-                  <div className="flex items-center gap-2">
-                    {index + 1}
-                    {getPositionBadge(index + 1)}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={user?.image} alt={user.name} />
-                      <AvatarFallback>
-                        {user.name.substring(0, 2).toUpperCase()}
-                       </AvatarFallback>
-                    </Avatar>
-                    <span>{user.name}</span>
-                  </div>
-                </TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell className="text-right font-medium">
-                  ${user.totalAmount.toString()}
-                </TableCell>
-              </TableRow>
-            ))}
+            {data.data.map((user, index: number) => {
+              console.log(user);
+              return (
+                <TableRow
+                  key={user.id}
+                  className={index < 3 ? "font-medium" : ""}
+                >
+                  <TableCell className="font-medium">
+                    <div className="flex items-center gap-2">
+                      {index + 1}
+                      {getPositionBadge(index + 1)}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage
+                          src={user.image}
+                          alt={user.name}
+                          referrerPolicy="no-referrer"
+                        />
+                        <AvatarFallback>
+                          {user.name.substring(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span>{user.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell className="text-right font-medium">
+                    ${user.totalAmount.toString()}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>

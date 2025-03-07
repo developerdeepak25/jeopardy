@@ -41,12 +41,12 @@ const Navbar = () => {
           {session ? (
             <>
               <NavLink href="/leaderboard">Leaderboard</NavLink>
-              <NavLink href="/jeopardy">Jeopardy Game</NavLink>
+              <NavLink href="/jeopardy">Play</NavLink>
               <Button className="cursor-pointer" onClick={() => signOut()}>Logout</Button>
             </>
           ) : (
-            <Button className="cursor-pointer">
-              <NavLink href="/login">login</NavLink>
+            <Button className="cursor-pointer text-white">
+              <NavLink className="text-white" href="/login">login</NavLink>
             </Button>
           )}
         </div>
