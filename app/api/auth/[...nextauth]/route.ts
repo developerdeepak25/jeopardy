@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -9,6 +11,46 @@ export const authOptions: AuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials, req) {
+        try {
+          // Find user in DB
+          console.log("credentials", credentials);
+          const user = await prisma.user.findUnique({
+            where: {
+              email: credentials?.email,
+            },
+          });
+          if (!user) {
+            throw new Error("No user found");
+          }
+          // Check password
+          const isValid = await bcrypt.compare(
+            credentials?.password!,
+            user?.password!
+          );
+          if (!isValid) {
+            throw new Error("Password is incorrect");
+          }
+
+          console.log("login done");
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: "USER",
+          };
+        } catch (error) {
+          console.log("error", error);
+          throw new Error("Something went wrong");
+        }
+      },
     }),
   ],
   callbacks: {
@@ -46,7 +88,6 @@ export const authOptions: AuthOptions = {
           user.role = dbUser.role;
           user.id = dbUser.id;
         }
-        
 
         return true;
       } catch (error) {

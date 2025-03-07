@@ -43,9 +43,9 @@ model Question {
 model Answer {
   id          String   @id @default(uuid()) // UUID as Primary Key
   userId      String
-  user        User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   questionId  String
-  question    Question @relation(fields: [questionId], references: [id])
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade) //? Not sure if ans should del if ques is del but for now it will del
   selectedIdx String //selected option index of a question
   correct     Boolean
 }
