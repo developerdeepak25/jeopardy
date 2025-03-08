@@ -75,6 +75,9 @@ export async function POST(request: NextRequest) {
             increment: question?.amount,
           },
         },
+        omit: {
+          password: true,
+        },
       });
     }
 

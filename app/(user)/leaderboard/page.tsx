@@ -16,7 +16,7 @@ import { Badge } from "@/components/ui/badge";
 const getGeopardyTable = async () => {
   console.log("getGeopardyTable running");
   const res = await axios.get("/api/user/leaderboard");
-  return res.data;
+  return res;
 };
 
 const LeaderBoard = () => {
@@ -71,7 +71,7 @@ const LeaderBoard = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.data.map((user, index: number) => {
+            {data.data.data.map((user, index: number) => {
               console.log(user);
               return (
                 <TableRow

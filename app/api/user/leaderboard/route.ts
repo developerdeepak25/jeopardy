@@ -5,7 +5,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     console.log(session);
@@ -21,6 +21,9 @@ export async function GET(request: NextRequest) {
           gt: 0,
         },
       },
+      omit: {
+        password: true,
+      },
       take: 10,
     });
 
@@ -28,7 +31,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "No data found" }, { status: 400 });
     }
 
- return   NextResponse.json({ data: leaderBoardData }, { status: 200 });
+    return NextResponse.json({ data: leaderBoardData }, { status: 200 });
   } catch (error) {
     console.log(error);
     return NextResponse.json(

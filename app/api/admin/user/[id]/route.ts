@@ -5,6 +5,10 @@ import { authOptions } from "../../../auth/[...nextauth]/route";
 
 const prisma = new PrismaClient();
 
+
+// DELETE /api/admin/user/[id]
+
+
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -44,6 +48,7 @@ export async function DELETE(
       { message: "User deleted successfully" },
       { status: 200 }
     );
+    
   } catch (error) {
     console.error("Error deleting user:", error);
     return NextResponse.json(

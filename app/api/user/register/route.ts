@@ -43,12 +43,9 @@ export async function POST(request: Request) {
         name,
         role: "USER", // Default role
       },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-      },
+      omit:{
+        password: true
+      }
     });
 
     return NextResponse.json(

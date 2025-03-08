@@ -52,6 +52,7 @@ export default function LoginPage() {
         password: data.password,
       });
       if (result?.ok) {
+        console.log("success", result);
         // Manual redirect on success
         router.push("/jeopardy");
         // or window.location.href = "/jeopardy";
