@@ -87,7 +87,6 @@ const UsersList = () => {
           </TableHeader>
           <TableBody>
             {
-              // @ts-expect-error: Unreachable code error
               users?.map((user) => (
                 <TableRow key={user.id}>
                   <TableCell className="font-medium">{user.name}</TableCell>
