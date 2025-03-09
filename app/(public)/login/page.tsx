@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
+import Link from "next/link";
 
 export default function LoginPage() {
   const {
@@ -74,6 +75,12 @@ export default function LoginPage() {
         <Input placeholder="Email" {...register("email")} />
         <Input placeholder="Password" {...register("password")} />
         {errors && <p>{errors.root?.message}</p>}
+        <Link
+          href="/forgot-password"
+          className="text-sm text-blue-600 hover:underline self-end"
+        >
+          forgot-password?
+        </Link>
         <Button type="submit" disabled={isSubmitting}>
           Submit
         </Button>

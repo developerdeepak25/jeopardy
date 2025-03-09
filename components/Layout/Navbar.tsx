@@ -27,10 +27,13 @@ import Link from "next/link";
 const Navbar = () => {
   //   const { auth } = useStore();
   //   console.log(auth);
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   return (
-    <nav className="bg-background border-b h-16 flex items-center shrink-0" aria-label="Main navigation">
+    <nav
+      className="bg-background border-b h-16 flex items-center shrink-0"
+      aria-label="Main navigation"
+    >
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center" aria-label="SmartSend logo">
           <span className="text-lg font-semibold">
@@ -38,16 +41,20 @@ const Navbar = () => {
           </span>
         </div>
         <div className="flex gap-4 items-center">
+          {/* contact is public route */}
+          <NavLink href="/contact">contact</NavLink>
           {session ? (
             <>
               <NavLink href="/leaderboard">Leaderboard</NavLink>
               <NavLink href="/jeopardy">Play</NavLink>
-              <Button className="cursor-pointer" onClick={() => signOut()}>Logout</Button>
+              <Button className="cursor-pointer" onClick={() => signOut()}>
+                Logout
+              </Button>
             </>
           ) : (
-            <Button className="cursor-pointer text-white">
-              <NavLink className="text-white" href="/login">login</NavLink>
-            </Button>
+            <NavLink className="text-white hover:text-white" href="/login">
+              <Button className="cursor-pointer text-white">login</Button>
+            </NavLink>
           )}
         </div>
       </div>

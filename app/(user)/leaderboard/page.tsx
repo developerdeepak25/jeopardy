@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { User } from "@/types/utils";
 
 const getGeopardyTable = async () => {
   console.log("getGeopardyTable running");
@@ -21,7 +22,7 @@ const getGeopardyTable = async () => {
 
 const LeaderBoard = () => {
   // api requests
-  const { data, error, isPending, isError } = useQuery({
+  const { data,  isPending, isError } = useQuery({
     queryKey: ["leaderbord"],
     queryFn: getGeopardyTable,
   });
@@ -71,7 +72,7 @@ const LeaderBoard = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.data.data.map((user, index: number) => {
+            {data.data.data.map((user: User, index: number) => {
               console.log(user);
               return (
                 <TableRow

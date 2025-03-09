@@ -8,15 +8,25 @@ type MCQFormProps = {
   setSelectedOption: React.Dispatch<React.SetStateAction<string>>;
   selectedOption: string;
 };
-const index = ({ question, setSelectedOption, selectedOption }: MCQFormProps) => {
-  const { options,  isAnswered, value } =
-    question;
+const index = ({
+  question,
+  setSelectedOption,
+  selectedOption,
+}: MCQFormProps) => {
+  const {
+    options, 
+    // isAnswered,
+    value,
+  } = question;
   return (
     <RadioGroup value={selectedOption} onValueChange={setSelectedOption}>
       <div className="py-4">
         <h3 className="font-medium text-lg mb-4">{value}</h3>
         {options.map((option, index) => (
-          <div key={index} className="flex items-center space-x-2 mb-3 cursor-pointer">
+          <div
+            key={index}
+            className="flex items-center space-x-2 mb-3 cursor-pointer"
+          >
             <RadioGroupItem
               value={index.toString()}
               id={`option-${index}`}

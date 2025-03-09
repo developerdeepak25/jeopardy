@@ -1,13 +1,14 @@
 "use client";
-import React, { useEffect } from "react";
-import { Input } from "@/components/ui/input";
+import React from "react";
+import { InputWithLabel } from "@/components/Inputs/InputWithLabel";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { registerFormType, registerSchema } from "@/schema/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { toast } from "sonner";
 
-const page = () => {
+const RegisterPage = () => {
   const {
     register,
     handleSubmit,
@@ -16,36 +17,50 @@ const page = () => {
     resolver: zodResolver(registerSchema),
   });
 
-  // ?dev
-  useEffect(() => {
-    console.log(errors);
-  });
-
   const onSubmit: SubmitHandler<registerFormType> = async (data) => {
-    console.log(data);
-    // const getGeopardyTable = async () => {/
-    const res = await axios.post("/api/user/register", data);
-    console.log(res);
+    try {
+      const res = await axios.post("/api/user/register", data);
+      if (res.status !== 200) {
+        toast.error("Registration failed. Please try again.");
+        return;
+      }
+      toast.success("Registration successful!");
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Registration failed. Please try again.");
+    }
   };
+
   return (
-    <div>
-      <div className="flex justify-center">
-        <form onSubmit={handleSubmit(onSubmit)} className="container">
-          <h1>Login page</h1>
-          <Input placeholder="Name" {...register("name")} />
-          {errors.name && <p>{errors.name.message}</p>}
-          <Input placeholder="Email" {...register("email")} />
-          {errors.email && <p>{errors.email?.message}</p>}
-          <Input placeholder="Password" {...register("password")} />
-          {errors.password && <p>{errors.password?.message}</p>}
-          {errors && <p>{errors.root?.message}</p>}
-          <Button type="submit" disabled={isSubmitting}>
-            Submit
-          </Button>
-        </form>
-      </div>
+    <div className="w-full h-full flex flex-col items-center justify-center">
+      <h2>Register Account</h2>
+      <p>Please fill in your details to create an account</p>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-4 w-full max-w-md p-4"
+      >
+        <InputWithLabel
+          label="Full Name"
+          {...register("name")}
+          error={errors.name}
+        />
+        <InputWithLabel
+          label="Email Address"
+          {...register("email")}
+          error={errors.email}
+        />
+        <InputWithLabel
+          label="Password"
+          type="password"
+          {...register("password")}
+          error={errors.password}
+        />
+        <Button type="submit" disabled={isSubmitting}>
+          Register
+        </Button>
+      </form>
     </div>
   );
 };
 
-export default page;
+export default RegisterPage;
