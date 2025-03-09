@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
     });
 
     // check if user has already answered the question
+    // @ts-expect-error: Unreachable code error
     if (user?.Answer.some((ans) => ans.questionId === quesId)) {
       return NextResponse.json(
         { error: "Question Already Answered" },
