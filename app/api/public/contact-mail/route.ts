@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import brevo, { SendSmtpEmail } from "@getbrevo/brevo";
+import  {
+  SendSmtpEmail,
+  TransactionalEmailsApi,
+  TransactionalEmailsApiApiKeys,
+} from "@getbrevo/brevo";
 import { contactSchema } from "@/schema/zodSchema";
 import axios from "axios";
 
@@ -54,9 +58,9 @@ export async function POST(req: Request) {
     const { name, email, message } = validation.data;
 
     // Initialize Brevo API client with TypeScript support
-    const apiInstance = new brevo.TransactionalEmailsApi();
+    const apiInstance = new TransactionalEmailsApi();
     apiInstance.setApiKey(
-      brevo.TransactionalEmailsApiApiKeys.apiKey,
+      TransactionalEmailsApiApiKeys.apiKey,
       process.env.BREVO_API_KEY as string
     );
 
