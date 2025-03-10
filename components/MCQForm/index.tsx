@@ -2,19 +2,22 @@ import React from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { JeopardyQuestion } from "@/types/utils";
+import { Button } from "../ui/button";
 
 type MCQFormProps = {
   question: JeopardyQuestion;
   setSelectedOption: React.Dispatch<React.SetStateAction<string>>;
   selectedOption: string;
+  onSubmit: () => void;
 };
 const index = ({
   question,
   setSelectedOption,
   selectedOption,
+  onSubmit
 }: MCQFormProps) => {
   const {
-    options, 
+    options,
     // isAnswered,
     value,
   } = question;
@@ -59,6 +62,9 @@ const index = ({
             </Label>
           </div>
         ))}
+        <Button onClick={() => onSubmit()} className="w-full">
+          Submit
+        </Button>
       </div>
     </RadioGroup>
   );

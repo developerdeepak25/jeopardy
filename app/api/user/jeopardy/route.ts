@@ -84,7 +84,7 @@ export async function GET() {
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
+    console.log('error',error);
     return NextResponse.json(
       { error: "Something went wrong" },
       { status: 500 }

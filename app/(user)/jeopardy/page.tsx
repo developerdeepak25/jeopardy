@@ -5,11 +5,13 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import QuestionModal from "@/components/QuestionModal/index";
 import MCQForm from "@/components/MCQForm/index";
-import {  JeopardyQuestion } from "@/types/utils";
+import { JeopardyQuestion } from "@/types/utils";
 import { toast } from "sonner";
-import {  Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
+import QuestionCard from "./components/QuestionCard";
+import { Modal } from "@/components/modal";
 
 const getGeopardyTable = async () => {
   console.log("getGeopardyTable running");
@@ -40,12 +42,12 @@ export default function JeopardyPage() {
   // const router = useRouter();
 
   // api requests
-  const { data, error } = useQuery({
+  const { data, error, isPending } = useQuery({
     queryKey: ["jeopardy"],
     queryFn: getGeopardyTable,
   });
 
-  const { mutate, data: mutateData ,isPending} = useMutation({
+  const { mutate, data: mutateData } = useMutation({
     mutationKey: ["submitAnswer"],
     mutationFn: async () => {
       if (!selectedQuestion?.id || !selectedOption) {
@@ -56,7 +58,8 @@ export default function JeopardyPage() {
     onError: (error) => {
       console.log("error", error);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log("data", data);
       toast.success("Answer submitted successfully"); //TODO show diff toast for wrong and right answer
       setIsModelOpen(false);
       setSelectedOption("");
@@ -101,13 +104,13 @@ export default function JeopardyPage() {
   // mutate();
   // }
   // };
-   if (isPending || status === "loading") {
-     return (
-       <div className="h-full w-full flex justify-center items-center">
-         <Loader2 className="animate-spin aspect-square h-10 w-10" />
-       </div>
-     );
-   }
+  if (isPending || status === "loading") {
+    return (
+      <div className="h-full w-full flex justify-center items-center">
+        <Loader2 className="animate-spin aspect-square h-10 w-10" />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col items-center">
@@ -128,73 +131,39 @@ export default function JeopardyPage() {
               </Card>
 
               {category.questions.map((question) => (
-                <Card
+                <QuestionCard
                   key={question.id}
-                  className={cn(
-                    "p-4 h-24 flex items-center justify-center cursor-pointer transition-all hover:scale-105 hover:shadow-lg",
-                    question.isAnswered
-                      ? question.isCorrect
-                        ? "bg-green-100 border-green-500 border-2"
-                        : "bg-red-100 border-red-500 border-2"
-                      : "bg-blue-100 border-blue-300"
-                  )}
-                  onClick={() => {
-                    if (!question.isAnswered) {
-                      handleQuesClick(question, category.name);
-                    }
-                  }}
-                >
-                  <div className="text-center relative w-full h-full flex flex-col items-center justify-center">
-                    {question.isAnswered ? (
-                      <>
-                        <div
-                          className={cn(
-                            "absolute top-1 right-1",
-                            // question.isCorrect ? "bg-green-500" : "bg-red-500"
-                          )}
-                        >
-                          {/* {question.isCorrect ? (
-                            <CircleCheck className="w-6 aspect-square mr-1" />
-                          ) : (
-                            <CircleSlash  className="w-6 aspect-square mr-1" />
-                          )} */}
-                          {/* {question.isCorrect ? "Correct" : "Incorrect"} */}
-                        </div>
-                        <p
-                          className={cn(
-                            "text-2xl font-bold",
-                            question.isCorrect
-                              ? "text-green-700"
-                              : "text-red-700"
-                          )}
-                        >
-                          ${question.amount}
-                        </p>
-                      </>
-                    ) : (
-                      <p className="text-2xl font-bold text-blue-700">
-                        ${question.amount}
-                      </p>
-                    )}
-                  </div>
-                </Card>
+                  question={question}
+                  onQuestionClick={(q) => handleQuesClick(q, category.name)}
+                />
               ))}
             </div>
           ))}
       </div>
       {selectedQuestion && (
-        <QuestionModal
+        // <QuestionModal
+        //   isOpen={isModelOpen}
+        //   setIsOpen={setIsModelOpen}
+        //   title={`${selectedCategory}: $${selectedQuestion?.amount}`}
+        //   onSubmit={() => mutate()}
+        // >
+        <Modal
           isOpen={isModelOpen}
-          setIsOpen={setIsModelOpen}
+          onClose={() => {
+            setIsModelOpen(false);
+            setSelectedOption("");
+            setSelectedQuestion(undefined);
+          }}
           title={`${selectedCategory}: $${selectedQuestion?.amount}`}
-          onSubmit={() => mutate()}
         >
           <MCQForm
             question={selectedQuestion}
             setSelectedOption={setSelectedOption}
             selectedOption={selectedOption}
+            onSubmit={() => mutate()}
           />
-        </QuestionModal>
+        </Modal>
+        // </QuestionModal>
       )}
     </div>
   );
