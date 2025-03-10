@@ -13,7 +13,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { User } from "@/types/utils";
-import { Loader2, LoaderCircle } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 const getGeopardyTable = async () => {
   console.log("getGeopardyTable running");

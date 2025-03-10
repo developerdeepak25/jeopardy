@@ -95,7 +95,7 @@ export default function LoginPage() {
             Sign in with Google
           </Button>
           <p className="mt-2">
-            don't have an account?{" "}
+            dont have an account?{" "}
             <Link href="/register" className="text-blue-600">
               register here.
             </Link>
