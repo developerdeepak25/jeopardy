@@ -8,6 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
+import AuthPageWrapper from "@/components/common/AuthPageWrapper";
+import FormWrapper from "@/components/common/FormWrapper";
 
 // TODO move to zod schema file
 const resetPasswordSchema = z
@@ -53,33 +55,39 @@ const ResetPasswordForm = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(handleResetPassword)}
-      className="flex flex-col gap-4 w-full max-w-md p-4"
-    >
-      <InputWithLabel
-        label="Enter Password"
-        type="password"
-        {...register("password")}
-        error={errors.password}
-      />
-      <InputWithLabel
-        label="Confirm Password"
-        type="password"
-        {...register("confirmPassword")}
-        error={errors.confirmPassword}
-      />
-      <Button type="submit" disabled={isSubmitting}>
-        Submit
-      </Button>
-    </form>
+    <AuthPageWrapper>
+      <FormWrapper
+        title="Reset Password"
+        description="Please enter your email to receive password reset link"
+      >
+        <form
+          onSubmit={handleSubmit(handleResetPassword)}
+          className="flex flex-col gap-4 w-full min-w-sm"
+        >
+          <InputWithLabel
+            label="Enter Password"
+            type="password"
+            {...register("password")}
+            error={errors.password}
+          />
+          <InputWithLabel
+            label="Confirm Password"
+            type="password"
+            {...register("confirmPassword")}
+            error={errors.confirmPassword}
+          />
+          <Button type="submit" disabled={isSubmitting}>
+            Submit
+          </Button>
+        </form>
+      </FormWrapper>
+    </AuthPageWrapper>
   );
 };
 
 const ResetPasswordPage = () => {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
-      <h2>Reset Password</h2>
       {/* //? IDK useSearchParams asked for suspense at build time */}
       <Suspense fallback={<div>Loading...</div>}>
         <ResetPasswordForm />

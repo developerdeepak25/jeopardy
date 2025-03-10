@@ -13,6 +13,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { User } from "@/types/utils";
+import { Loader2, LoaderCircle } from "lucide-react";
 
 const getGeopardyTable = async () => {
   console.log("getGeopardyTable running");
@@ -33,7 +34,11 @@ const LeaderBoard = () => {
     return <h1>Something went wrong</h1>;
   }
   if (isPending) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="h-full w-full flex justify-center items-center">
+        <Loader2 className="animate-spin aspect-square h-10 w-10" />
+      </div>
+    );
   }
 
   const getPositionBadge = (position: number) => {

@@ -35,18 +35,21 @@ const Navbar = () => {
       aria-label="Main navigation"
     >
       <div className="container mx-auto flex items-center justify-between">
-        <div className="flex items-center" aria-label="SmartSend logo">
-          <span className="text-lg font-semibold">
+        <div
+          className="flex items-center cursor-pointer"
+          aria-label="SmartSend logo"
+        >
+          <span className="text-lg font-semibold ">
             <Link href="/">Logo</Link>
           </span>
         </div>
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-6 items-center">
           {/* contact is public route */}
           <NavLink href="/contact">contact</NavLink>
           {session ? (
             <>
               <NavLink href="/leaderboard">Leaderboard</NavLink>
-              <NavLink href="/jeopardy">Play</NavLink>
+              <NavLink href="/jeopardy">Play Jeopardy</NavLink>
               <Button className="cursor-pointer" onClick={() => signOut()}>
                 Logout
               </Button>

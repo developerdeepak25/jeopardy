@@ -7,6 +7,9 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Link from "next/link";
+import AuthPageWrapper from "@/components/common/AuthPageWrapper";
+import FormWrapper from "@/components/common/FormWrapper";
+import GoogleLogo from "@/assets/GoogleLogo";
 
 export default function LoginPage() {
   const {
@@ -66,26 +69,39 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center">
-      <h2>Login</h2>
-      <form
-        onSubmit={handleSubmit(handlerCredentialsLogin)}
-        className="flex flex-col "
-      >
-        <Input placeholder="Email" {...register("email")} />
-        <Input placeholder="Password" {...register("password")} />
-        {errors && <p>{errors.root?.message}</p>}
-        <Link
-          href="/forgot-password"
-          className="text-sm text-blue-600 hover:underline self-end"
+    <AuthPageWrapper>
+      <FormWrapper title="Login to Jeopardy">
+        <form
+          onSubmit={handleSubmit(handlerCredentialsLogin)}
+          className="flex flex-col gap-4 w-full min-w-sm"
         >
-          forgot-password?
-        </Link>
-        <Button type="submit" disabled={isSubmitting}>
-          Submit
-        </Button>
-      </form>
-      <Button onClick={handleGoogleLogin}>Sign in with Google</Button>
-    </div>
+          <Input placeholder="Email" {...register("email")} />
+          <Input placeholder="Password" {...register("password")} />
+          {errors.root && <p>{errors.root?.message}</p>}
+          <Link
+            href="/forgot-password"
+            className="text-sm text-blue-600 hover:underline self-end"
+          >
+            forgot-password?
+          </Link>
+          <Button type="submit" disabled={isSubmitting}>
+            Submit
+          </Button>
+        </form>
+        <p className="text-center my-1">or</p>
+        <div className="flex flex-col items-end">
+          <Button onClick={handleGoogleLogin} className="shrink-0 w-full">
+            <GoogleLogo />
+            Sign in with Google
+          </Button>
+          <p className=" mt-2">
+            don't have an account?{" "}
+            <Link href="/register" className="text-blue-600">
+              register here.
+            </Link>
+          </p>
+        </div>
+      </FormWrapper>
+    </AuthPageWrapper>
   );
 }

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { InputWithLabel } from "@/components/Inputs/InputWithLabel";
 import { Button } from "@/components/ui/button";
 import React from "react";
@@ -7,6 +7,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { toast } from "sonner";
+import AuthPageWrapper from "@/components/common/AuthPageWrapper";
+import FormWrapper from "@/components/common/FormWrapper";
 
 // TODO move to zod schema file
 const forgotPasswordSchema = z.object({
@@ -42,23 +44,26 @@ const ForgotPasswordPage = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center">
-      <h2>forgot  Password</h2>
-      <p>please enter your email to receive password reset link</p>
-      <form
-        onSubmit={handleSubmit(handleforgotPassword)}
-        className="flex flex-col gap-4 w-full max-w-md p-4"
+    <AuthPageWrapper>
+      <FormWrapper
+        title="Forgot your password?"
+        description="Please enter your email to receive password reset link"
       >
-        <InputWithLabel
-          label="Enter your email"
-          {...register("email")}
-          error={errors.email}
-        />
-        <Button type="submit" disabled={isSubmitting}>
-          Submit
-        </Button>
-      </form>
-    </div>
+        <form
+          onSubmit={handleSubmit(handleforgotPassword)}
+          className="flex flex-col gap-4 w-full min-w-sm"
+        >
+          <InputWithLabel
+            label="Enter your email"
+            {...register("email")}
+            error={errors.email}
+          />
+          <Button type="submit" disabled={isSubmitting}>
+            Submit
+          </Button>
+        </form>
+      </FormWrapper>
+    </AuthPageWrapper>
   );
 };
 
