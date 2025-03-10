@@ -41,11 +41,11 @@ export async function POST(request: Request) {
         email,
         password: hashedPassword,
         name,
-        role: "USER", // Default role
+        role: email === process.env.ADMIN_EMAIL ? "ADMIN" : "USER", // Default role
       },
-      omit:{
-        password: true
-      }
+      omit: {
+        password: true,
+      },
     });
 
     return NextResponse.json(
