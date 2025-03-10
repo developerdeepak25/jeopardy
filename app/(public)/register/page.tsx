@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { toast } from "sonner";
 import FormWrapper from "@/components/common/FormWrapper";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 
 const RegisterPage = () => {
   const {
@@ -18,7 +18,7 @@ const RegisterPage = () => {
   } = useForm<registerFormType>({
     resolver: zodResolver(registerSchema),
   });
-  const router = useRouter();
+  // const router = useRouter();
   // const handlerCredentialsLogin: SubmitHandler<loginFormType> = async (
   //     data
   //   ) => {
@@ -53,7 +53,7 @@ const RegisterPage = () => {
       }
       // handlerCredentialsLogin(data); //TODO do it
 
-      router.push("/login");
+      // router.push("/login");
       toast.success("Registration successful!");
     } catch (error) {
       console.error("Error:", error);
