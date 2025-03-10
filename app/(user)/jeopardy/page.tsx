@@ -5,9 +5,9 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import QuestionModal from "@/components/QuestionModal/index";
 import MCQForm from "@/components/MCQForm/index";
-import { Category, JeopardyQuestion } from "@/types/utils";
+import {  JeopardyQuestion } from "@/types/utils";
 import { toast } from "sonner";
-import { Badge,  CircleCheck, CircleSlash, Loader2 } from "lucide-react";
+import {  Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 
