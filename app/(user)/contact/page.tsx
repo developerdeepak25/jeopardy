@@ -11,6 +11,8 @@ import { toast } from "sonner";
 import ReCAPTCHA from "react-google-recaptcha";
 // import ContactImage from "@/assets/images/12982910_5124556.jpg"
 import Image from "next/image";
+import { TextareaWithLabel } from "@/components/Inputs/TextareaWithLabel";
+import { getAxiosErrorMessage } from "@/utils/functions";
 
 const ContactPage = () => {
   const captchaRef = React.useRef<ReCAPTCHA>(null);
@@ -37,7 +39,10 @@ const ContactPage = () => {
       captchaRef.current?.reset();
     },
     onError: (error: Error) => { //? Error tpye may be wrong here
-      toast.error(error.message || "Failed to send message. Please try again.");
+      // toast.error(error.message || "Failed to send message. Please try again.");
+      toast.error(
+        getAxiosErrorMessage(error, "Failed to send message. Please try again.")
+      );
       captchaRef.current?.reset();
     },
   });
@@ -83,10 +88,12 @@ const ContactPage = () => {
               {...register("email")}
               error={errors.email}
             />
-            <InputWithLabel
+            <TextareaWithLabel
               label="Enter Your Message"
               {...register("message")}
               error={errors.message}
+              rows={20}
+              className="min-h-28 resize-y"
             />
             <ReCAPTCHA
               sitekey={process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY!}

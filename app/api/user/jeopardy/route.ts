@@ -55,7 +55,7 @@ export async function GET() {
               },
               select: {
                 id: true, // Fetching only the existence of the answer
-                correct: true,
+                isCorrect: true,
               },
             },
           },
@@ -72,7 +72,7 @@ export async function GET() {
       questions: category.questions.map((question) => ({
         ...question,
         isAnswered: question.Answer.length > 0, 
-        isCorrect: question.Answer.length > 0 && question.Answer[0].correct,
+        isCorrect: question.Answer.length > 0 && question.Answer[0].isCorrect,
       })),
     }));
 

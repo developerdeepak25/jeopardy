@@ -7,9 +7,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { toast } from "sonner";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import AuthPageWrapper from "@/components/common/AuthPageWrapper";
 import FormWrapper from "@/components/common/FormWrapper";
+import { getAxiosErrorMessage } from "@/utils/functions";
 
 // TODO move to zod schema file
 const resetPasswordSchema = z
@@ -35,6 +36,8 @@ const ResetPasswordForm = () => {
   } = useForm<ResetPasswordInputs>({
     resolver: zodResolver(resetPasswordSchema),
   });
+    const router = useRouter();
+
 
   const handleResetPassword = async (data: ResetPasswordInputs) => {
     try {
@@ -48,9 +51,11 @@ const ResetPasswordForm = () => {
         return;
       }
       toast.success("Password reset successful. You can now login.");
+      router.push("/login");
     } catch (error) {
       console.error("Error:", error);
-      toast.error("Failed to reset password. Please try again.");
+      // toast.error("Failed to reset password. Please try again.");
+      toast.error(getAxiosErrorMessage(error));
     }
   };
 

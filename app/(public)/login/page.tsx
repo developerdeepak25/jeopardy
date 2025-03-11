@@ -10,6 +10,10 @@ import Link from "next/link";
 import AuthPageWrapper from "@/components/common/AuthPageWrapper";
 import FormWrapper from "@/components/common/FormWrapper";
 import GoogleLogo from "@/assets/GoogleLogo";
+import { getAxiosErrorMessage } from "@/utils/functions";
+import { toast } from "sonner";
+import { useHandleCredentialsLogin } from "@/hooks";
+import { InputWithLabel } from "@/components/Inputs/InputWithLabel";
 
 export default function LoginPage() {
   const {
@@ -19,7 +23,7 @@ export default function LoginPage() {
   } = useForm<loginFormType>({
     resolver: zodResolver(loginSchema),
   });
-  const router = useRouter();
+  const { handleCredentialsLogin } = useHandleCredentialsLogin();
 
   const handleGoogleLogin = async () => {
     try {
@@ -31,40 +35,10 @@ export default function LoginPage() {
       console.log(result);
       if (result?.error) {
         console.log("error", result.error);
-        // const url = new URL(window.location.href);
-        // url.searchParams.set("error", result?.error);
-        // window.history.replaceState(null, "", url.toString()); // Update URL without reloading
-        // window.history.replaceState(
-        //   null,
-        //   "",
-        //   "/login?error=" + encodeURIComponent(result.error)
-        // ); // Update URL
+        
       }
     } catch (error) {
       console.error("Error signing in", error);
-    }
-  };
-  const handlerCredentialsLogin: SubmitHandler<loginFormType> = async (
-    data
-  ) => {
-    console.log(data);
-    try {
-      const result = await signIn("credentials", {
-        callbackUrl: "/jeopardy",
-        redirect: false,
-        email: data.email,
-        password: data.password,
-      });
-      if (result?.ok) {
-        console.log("success", result);
-        // Manual redirect on success
-        router.push("/jeopardy");
-        // or window.location.href = "/jeopardy";
-      }
-      console.log(result);
-    } catch (error) {
-      console.error("Error signing in", error);
-      //
     }
   };
 
@@ -72,12 +46,21 @@ export default function LoginPage() {
     <AuthPageWrapper>
       <FormWrapper title="Login to Jeopardy">
         <form
-          onSubmit={handleSubmit(handlerCredentialsLogin)}
+          onSubmit={handleSubmit(handleCredentialsLogin)}
           className="flex flex-col gap-4 w-full min-w-sm"
         >
-          <Input placeholder="Email" {...register("email")} />
-          <Input placeholder="Password" {...register("password")} />
-          {errors.root && <p>{errors.root?.message}</p>}
+          <InputWithLabel
+            label="Email Address"
+            {...register("email")}
+            error={errors.email}
+          />
+          <InputWithLabel
+            label="Password"
+            type="password"
+            {...register("password")}
+            error={errors.password}
+          />
+          {/* {errors.root && <p>{errors.root?.message}</p>} */}
           <Link
             href="/forgot-password"
             className="text-sm text-blue-600 hover:underline self-end"

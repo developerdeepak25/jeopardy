@@ -1,17 +1,16 @@
 "use client";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import QuestionModal from "@/components/QuestionModal/index";
 import MCQForm from "@/components/MCQForm/index";
 import { JeopardyQuestion } from "@/types/utils";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import QuestionCard from "./components/QuestionCard";
 import { Modal } from "@/components/modal";
+import { getAxiosErrorMessage } from "@/utils/functions";
 
 const getGeopardyTable = async () => {
   console.log("getGeopardyTable running");
@@ -24,7 +23,7 @@ const submitAnswer = async (questionId: string, ansIndex: string) => {
   const res = await axios.post(
     `/api/user/answer?quesId=${questionId}&ansIndex=${ansIndex}`
   );
-  return res;
+  return res.data;
 };
 
 export default function JeopardyPage() {
@@ -32,6 +31,8 @@ export default function JeopardyPage() {
   const [selectedOption, setSelectedOption] = useState("");
   const [selectedQuestion, setSelectedQuestion] = useState<JeopardyQuestion>();
   const [selectedCategory, setSelectedCategory] = useState("");
+
+  const queryClient = useQueryClient();
 
   // TODO remove this effect after dev
   useEffect(() => {
@@ -56,11 +57,20 @@ export default function JeopardyPage() {
       return await submitAnswer(selectedQuestion.id, selectedOption);
     },
     onError: (error) => {
+      const errMessage = getAxiosErrorMessage(error);
+      toast.error(errMessage); //! this might get error
       console.log("error", error);
     },
     onSuccess: (data) => {
-      console.log("data", data);
-      toast.success("Answer submitted successfully"); //TODO show diff toast for wrong and right answer
+      console.log("data", data.data.answer); //?dev
+      if (data?.data?.answer?.isCorrect) {
+        toast.success("You Picked The Right Answer!");
+      } else {
+        toast.error("You Picked The Wrong Answer!");
+      }
+      // toast.success("Answer submitted successfully"); //TODO show diff toast for wrong and right answer
+      queryClient.invalidateQueries({ queryKey: ["jeopardy"] });
+
       setIsModelOpen(false);
       setSelectedOption("");
     },
@@ -68,7 +78,7 @@ export default function JeopardyPage() {
 
   // TODO remove this effect after dev
   useEffect(() => {
-    console.log("mutateData", mutateData?.data.data.answer);
+    console.log("mutateData", mutateData?.data);
   }, [mutateData]);
 
   //
@@ -83,11 +93,6 @@ export default function JeopardyPage() {
     console.log("error", error);
   }, [error, data, selectedOption, selectedQuestion]);
 
-  // if (status === "loading") return <p>Loading...</p>;
-  // if (!session) {
-  //   router.push("/login");
-  //   return null;
-  // }
   console.log("session", session);
 
   function handleQuesClick(question: JeopardyQuestion, category: string) {
@@ -95,15 +100,7 @@ export default function JeopardyPage() {
     setIsModelOpen(true);
     setSelectedCategory(category);
   }
-  // const handleSubmit = () => {
-  // setIsModelOpen(false);
-  // setSelectedOption("");
-  // if (selectedQuestion?.id) {
-  // const answer = submitAnswer(selectedQuestion.id, selectedOption);
-  // console.log("answer", answer.data.data.answer); // TODO: remoce it
-  // mutate();
-  // }
-  // };
+
   if (isPending || status === "loading") {
     return (
       <div className="h-full w-full flex justify-center items-center">

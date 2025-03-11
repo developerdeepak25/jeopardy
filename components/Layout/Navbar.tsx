@@ -50,6 +50,9 @@ const Navbar = () => {
             <>
               <NavLink href="/leaderboard">Leaderboard</NavLink>
               <NavLink href="/jeopardy">Play Jeopardy</NavLink>
+              {session.user.role === "ADMIN" && (
+                <NavLink href="/admin">Admin</NavLink>
+              )}
               <Button className="cursor-pointer" onClick={() => signOut()}>
                 Logout
               </Button>

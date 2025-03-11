@@ -26,6 +26,9 @@ export async function GET() {
 
     // Get all users with their total amount and answers count
     const users = await prisma.user.findMany({
+      where:{
+        role: "USER",
+      },
       select: {
         id: true,
         name: true,
@@ -39,6 +42,7 @@ export async function GET() {
           },
         },
       },
+     
     });
 
     return NextResponse.json(users, { status: 200 });

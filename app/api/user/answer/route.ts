@@ -59,12 +59,12 @@ export async function POST(request: NextRequest) {
         userId: session.user.id,
         questionId: quesId,
         selectedIdx: ansIndex,
-        correct: parseInt(ansIndex) === question?.CorrectIdx,
+        isCorrect: parseInt(ansIndex) === question?.CorrectIdx,
       },
     });
 
     let updatedUser;
-    if (answer.correct) {
+    if (answer.isCorrect) {
       //? may require more checks
       updatedUser = await prisma.user.update({
         where: {

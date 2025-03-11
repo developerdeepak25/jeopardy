@@ -4,14 +4,15 @@ export type JeopardyQuestion = {
   options: string[];
   amount: number;
   // correctAnswer: string;
+  isCorrect?: boolean;
+  isAnswered?: boolean;
 };
 
-export type Category ={
+export type Category = {
   id: string;
   name: string;
   questions: JeopardyQuestion[];
-}
-
+};
 
 export type User = {
   id: string;
@@ -20,4 +21,4 @@ export type User = {
   role: "ADMIN" | "USER";
   image?: string;
   totalAmount: number;
-}
+};

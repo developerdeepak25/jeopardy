@@ -9,6 +9,8 @@ import axios from "axios";
 import { toast } from "sonner";
 import AuthPageWrapper from "@/components/common/AuthPageWrapper";
 import FormWrapper from "@/components/common/FormWrapper";
+import { getAxiosErrorMessage } from "@/utils/functions";
+import { useRouter } from "next/navigation";
 
 // TODO move to zod schema file
 const forgotPasswordSchema = z.object({
@@ -32,14 +34,21 @@ const ForgotPasswordPage = () => {
 
       if (res.status !== 200) {
         console.log(res); //?dev
-        toast.error("Failed to request password reset. Please try again.");
+        // toast.error("Failed to request password reset. Please try again.");
+        toast.error(
+          getAxiosErrorMessage(
+            res,
+            "Failed to request password reset. Please try again."
+          )
+        );
         return;
       }
       console.log("Password reset requested for:", data.email);
       toast.success("Password reset link sent to your email.");
     } catch (error) {
       console.error("Error:", error);
-      toast.error("Failed to request password reset. Please try again.");
+      // toast.error("Failed to request password reset. Please try again.");
+      toast.error(getAxiosErrorMessage(error));
     }
   };
 

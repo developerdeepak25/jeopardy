@@ -10,7 +10,7 @@ type MCQFormProps = {
   selectedOption: string;
   onSubmit: () => void;
 };
-const index = ({
+const MCQForm = ({
   question,
   setSelectedOption,
   selectedOption,
@@ -62,7 +62,7 @@ const index = ({
             </Label>
           </div>
         ))}
-        <Button onClick={() => onSubmit()} className="w-full">
+        <Button onClick={() => onSubmit()} className="w-full" disabled={!selectedOption}>
           Submit
         </Button>
       </div>
@@ -70,4 +70,4 @@ const index = ({
   );
 };
 
-export default index;
+export default MCQForm;

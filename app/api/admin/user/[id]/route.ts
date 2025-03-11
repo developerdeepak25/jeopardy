@@ -30,9 +30,9 @@ export async function DELETE(
 
     const { id } = await params;
 
-    // Check if user exists
+    // Check if user exists 
     const userExists = await prisma.user.findUnique({
-      where: { id },
+      where: { id, role: "USER" }, // * NOTE HERE NOT FETCHING ADMIN  
     });
 
     if (!userExists) {

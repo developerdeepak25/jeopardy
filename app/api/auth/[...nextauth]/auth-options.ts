@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import  { AuthOptions } from "next-auth";
+import { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
@@ -51,7 +51,10 @@ export const authOptions: AuthOptions = {
           };
         } catch (error) {
           console.log("error", error);
-          throw new Error("Something went wrong");
+          if (error instanceof Error) {
+            throw new Error(error.message);
+          }
+          throw new Error('Something went wrong');
         }
       },
     }),

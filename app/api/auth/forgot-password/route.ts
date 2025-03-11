@@ -8,7 +8,9 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { email } = body;
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
     if (!user)
       return NextResponse.json({ error: "User not found" }, { status: 404 });
 
@@ -45,8 +47,8 @@ export async function POST(req: Request) {
     };
 
     // Send the email
-   const res =  await apiInstance.sendTransacEmail(resetEmail);
-   console.log(res); //?dev
+    const res = await apiInstance.sendTransacEmail(resetEmail);
+    console.log(res); //?dev
 
     return NextResponse.json(
       { message: "Password reset link sent to your email" },
