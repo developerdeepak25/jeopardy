@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
+import { Edit, Loader2 } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Modal } from "@/components/modal";
@@ -80,8 +80,13 @@ const QuestionsList = () => {
   };
 
   if (error) return <div>Error loading questions</div>;
-  if (isPending) return <div>Loading...</div>;
-
+if (isPending) {
+  return (
+    <div className="h-full w-full flex justify-center items-center">
+      <Loader2 className="animate-spin aspect-square h-10 w-10" />
+    </div>
+  );
+}
   return (
     <>
       <div className="rounded-md border">
@@ -187,7 +192,7 @@ const EditQuestionModal = ({
       value: data.value,
     });
   };
-
+  
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Edit Question">
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">

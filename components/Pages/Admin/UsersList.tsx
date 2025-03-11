@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import Alert from "@/components/Alert";
@@ -62,14 +62,19 @@ const UsersList = () => {
     }
   };
 
+  // TODO: add error UI
   if (error) {
     console.error("Error fetching users:", error);
     return <div>Error loading users</div>;
   }
 
-  if (isPending) {
-    return <div>Loading...</div>;
-  }
+ if (isPending) {
+   return (
+     <div className="h-full w-full flex justify-center items-center">
+       <Loader2 className="animate-spin aspect-square h-10 w-10" />
+     </div>
+   );
+ }
 
   return (
     <>
