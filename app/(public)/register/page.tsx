@@ -3,7 +3,6 @@ import React from "react";
 import { InputWithLabel } from "@/components/Inputs/InputWithLabel";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
-  loginFormType,
   registerFormType,
   registerSchema,
 } from "@/schema/zodSchema";
@@ -13,8 +12,6 @@ import axios from "axios";
 import { toast } from "sonner";
 import FormWrapper from "@/components/common/FormWrapper";
 import { getAxiosErrorMessage } from "@/utils/functions";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useHandleCredentialsLogin } from "@/hooks";
 import Link from "next/link";
 // import { useRouter } from "next/navigation";
@@ -27,7 +24,6 @@ const RegisterPage = () => {
   } = useForm<registerFormType>({
     resolver: zodResolver(registerSchema),
   });
-  const router = useRouter();
   const { handleCredentialsLogin } = useHandleCredentialsLogin();
 
   // const handlerCredentialsLogin: SubmitHandler<loginFormType> = async (

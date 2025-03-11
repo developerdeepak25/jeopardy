@@ -10,7 +10,6 @@ import { toast } from "sonner";
 import AuthPageWrapper from "@/components/common/AuthPageWrapper";
 import FormWrapper from "@/components/common/FormWrapper";
 import { getAxiosErrorMessage } from "@/utils/functions";
-import { useRouter } from "next/navigation";
 
 // TODO move to zod schema file
 const forgotPasswordSchema = z.object({

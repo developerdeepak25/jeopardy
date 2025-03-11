@@ -1,17 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { loginFormType, loginSchema } from "@/schema/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { SubmitHandler, useForm } from "react-hook-form";
+import {  useForm } from "react-hook-form";
 import Link from "next/link";
 import AuthPageWrapper from "@/components/common/AuthPageWrapper";
 import FormWrapper from "@/components/common/FormWrapper";
 import GoogleLogo from "@/assets/GoogleLogo";
-import { getAxiosErrorMessage } from "@/utils/functions";
-import { toast } from "sonner";
 import { useHandleCredentialsLogin } from "@/hooks";
 import { InputWithLabel } from "@/components/Inputs/InputWithLabel";
 
