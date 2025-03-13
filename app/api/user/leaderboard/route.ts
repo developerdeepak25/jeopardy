@@ -21,6 +21,9 @@ export async function GET() {
           gt: 0,
         },
       },
+      orderBy: {
+        totalAmount: "desc",
+      },
       omit: {
         password: true,
       },
